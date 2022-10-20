@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2018"
 
 [dependencies]
-winter-air = { package = "winter-air", git = "https://github.com/maxgillett/winterfell", rev = "0aad6a5", default-features = false }
-winter-utils = { package = "winter-utils", git = "https://github.com/maxgillett/winterfell", rev = "0aad6a5", default-features = false }
+winter-air = { package = "winter-air", git = "https://github.com/zerosync/winterfell", rev = "27847af", default-features = false }
+winter-utils = { package = "winter-utils", git = "https://github.com/zerosync/winterfell", rev = "27847af", default-features = false }
 giza_core = { package = "giza-core", path = "../core", version = "0.1", default-features = false }
 serde = "1.0.137"

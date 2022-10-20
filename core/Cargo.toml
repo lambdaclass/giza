@@ -5,8 +5,8 @@ edition = "2021"
 rust-version = "1.57"
 
 [dependencies]
-math = { package = "winter-math", git = "https://github.com/maxgillett/winterfell", rev = "0aad6a5", version = "0.4", default-features = false }
-winter-utils = { package = "winter-utils", git = "https://github.com/maxgillett/winterfell", rev = "0aad6a5", version = "0.4", default-features = false }
+math = { package = "winter-math", git = "https://github.com/zerosync/winterfell", rev = "27847af", version = "0.4", default-features = false }
+winter-utils = { package = "winter-utils", git = "https://github.com/zerosync/winterfell", rev = "27847af", version = "0.4", default-features = false }
 ff = { version = "0.12", features = ["derive"] }
 hex = "0.4"
 
