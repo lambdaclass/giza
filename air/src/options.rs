@@ -37,7 +37,7 @@ impl ProofOptions {
             num_queries.unwrap_or(54),  // 27
             blowup_factor.unwrap_or(4), //8,
             grinding_factor.unwrap_or(16),
-            HashFunction::Blake3_192,
+            HashFunction::Blake2b_256,
             FieldExtension::None,
             fri_folding_factor.unwrap_or(8),
             fri_max_remainder_size.unwrap_or(256),
