@@ -11,7 +11,7 @@ doctest = false
 [dependencies]
 air = { package = "giza-air", path = "../air", version = "0.1", default-features = false }
 giza_core = { package = "giza-core", path = "../core", version = "0.1", default-features = false }
-winterfell = { package = "winter-prover", git = "https://github.com/zerosync/winterfell", rev = "27847af", version = "0.4", features = ["concurrent"], default-features = false }
+winterfell = { package = "winter-prover", git = "https://github.com/zerosync/winterfell", version = "0.4", features = ["concurrent"], default-features = false }
 serde = { version = "1.0.136", features = ["derive"] }
 serde_json = "1.0.79"
 itertools = "0.10.3"
