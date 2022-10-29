@@ -5,7 +5,6 @@ use super::ProveArgs;
 use crate::{cmd::ProofData, utils::Cmd};
 use air::ProofOptions;
 use runner::ExecutionTrace;
-use winter_utils::Serializable;
 
 pub struct ProveOutput {}
 

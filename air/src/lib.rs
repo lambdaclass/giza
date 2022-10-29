@@ -4,10 +4,13 @@ use giza_core::{
     Builtin, ExtensionOf, Felt, FieldElement, RegisterState, Word, A_RC_PRIME_FIRST,
     A_RC_PRIME_LAST, MEM_A_TRACE_OFFSET, MEM_P_TRACE_OFFSET, P_M_LAST,
 };
+use starknet_crypto::pedersen_hash;
+use starknet_ff::FieldElement as StarknetFieldElement;
 use winter_air::{
     Air, AirContext, Assertion, AuxTraceRandElements, ProofOptions as WinterProofOptions,
     TraceInfo, TransitionConstraintDegree,
 };
+use winter_crypto::{hashers::Blake2s_256, ElementHasher};
 use winter_utils::{ByteReader, ByteWriter, Deserializable, DeserializationError, Serializable};
 
 // EXPORTS
@@ -211,40 +214,75 @@ impl PublicInputs {
             builtins,
         }
     }
-}
 
-// TODO: Implement Serializable/Deserializable traits in RegisterState and Memory
-// structs instead of manually managing it here
-impl Serializable for PublicInputs {
-    fn write_into<W: ByteWriter>(&self, target: &mut W) {
-        target.write(self.init.pc);
-        target.write(self.init.ap);
-        target.write(self.init.fp);
-        target.write(self.fin.pc);
-        target.write(self.fin.ap);
-        target.write(self.fin.fp);
-        target.write_u16(self.rc_min);
-        target.write_u16(self.rc_max);
-        target.write_u64(self.mem.1.len() as u64);
+    /// Serializes PublicInputs into a vector of bytes.
+    pub fn to_bytes(&self) -> Vec<u8> {
+        // TODO: Implement Serializable/Deserializable traits in RegisterState and Memory
+        // structs instead of manually managing it here
+        let mut result = Vec::new();
+        result.write(self.init.pc);
+        result.write(self.init.ap);
+        result.write(self.init.fp);
+        result.write(self.fin.pc);
+        result.write(self.fin.ap);
+        result.write(self.fin.fp);
+        result.write_u16(self.rc_min);
+        result.write_u16(self.rc_max);
+        result.write_u64(self.mem.1.len() as u64);
         for i in 0..self.mem.1.len() as usize {
-            target.write_u64(self.mem.0[i]);
+            result.write_u64(self.mem.0[i]);
         }
-        target.write(
+        result.write(
             self.mem
                 .1
                 .iter()
                 .map(|x| x.unwrap().word())
                 .collect::<Vec<_>>(),
         );
-        target.write_u64(self.num_steps as u64);
+        result.write_u64(self.num_steps as u64);
         // TODO: Use bit representation once multiple builtins are supported
         for builtin in self.builtins.iter() {
             if let Builtin::Output(_) = builtin {
-                target.write_u8(1);
+                result.write_u8(1);
             } else {
-                target.write_u8(0);
+                result.write_u8(0);
             }
         }
+        result
+    }
+}
+
+/// Serializes PublicInputs into a digest used to efficiently seed the public coin
+impl Serializable for PublicInputs {
+    fn write_into<W: ByteWriter>(&self, target: &mut W) {
+        let mut data = Vec::new();
+        let pub_mem_hash = self
+            .mem
+            .1
+            .iter()
+            .map(|x| StarknetFieldElement::from_mont(x.unwrap().word().to_raw().0))
+            .reduce(|hash, item| pedersen_hash(&hash, &item))
+            .unwrap()
+            .to_bytes_be();
+
+        data.push(self.init.pc);
+        data.push(self.init.ap);
+        data.push(self.init.fp);
+
+        data.push(self.fin.pc);
+        data.push(self.fin.ap);
+        data.push(self.fin.fp);
+
+        data.push(self.rc_min.into());
+        data.push(self.rc_max.into());
+
+        data.push(self.mem.0.len().into());
+        data.push(pub_mem_hash.into());
+
+        data.push(self.num_steps.into());
+
+        let hash = Blake2s_256::hash_elements(&data);
+        target.write(hash);
     }
 }
 
