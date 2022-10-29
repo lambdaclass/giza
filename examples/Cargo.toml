@@ -15,4 +15,4 @@ air = { package = "giza-air", path = "../air", version = "0.1", default-features
 prover = { package = "giza-prover", path = "../prover", version = "0.1", default-features = false }
 runner = { package = "giza-runner", path = "../runner", version = "0.1", default-features = false }
 giza_core = { package = "giza-core", path = "../core", version = "0.1", default-features = false }
-winterfell = { package = "winter-verifier", git = "https://github.com/zerosync/winterfell", rev = "517ca59", features = ["std"], version = "0.4", default-features = false }
+winterfell = { package = "winter-verifier", git = "https://github.com/zerosync/winterfell", features = ["std"], version = "0.4", default-features = false }

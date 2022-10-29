@@ -12,8 +12,8 @@ wasm-bindgen = "0.2.74"
 js-sys = "0.3.57"
 air = { package = "giza-air", path = "../air", version = "0.1", default-features = false }
 giza_core = { package = "giza-core", path = "../core", version = "0.1", default-features = false }
-winterfell = { package = "winter-verifier", git = "https://github.com/zerosync/winterfell", rev = "517ca59", version = "0.4", default-features = false }
-winter-utils = { package = "winter-utils", git = "https://github.com/zerosync/winterfell", rev = "517ca59", version = "0.4", default-features = false }
+winterfell = { package = "winter-verifier", git = "https://github.com/zerosync/winterfell", version = "0.4", default-features = false }
+winter-utils = { package = "winter-utils", git = "https://github.com/zerosync/winterfell", version = "0.4", default-features = false }
 bincode = "1.3.3"
 serde = { version = "1.0.136", features = ["derive"] }
 

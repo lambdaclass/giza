@@ -5,7 +5,7 @@
 ///   prime is assumed to be equal to the 252-bit Starkware prime).
 ///
 use crate::memory::Memory;
-use giza_core::{Builtin, Felt, RegisterState, Word};
+use giza_core::{Builtin, Felt, RegisterState};
 use serde::{Deserialize, Serialize};
 use std::fs::{metadata, File};
 use std::io::{BufReader, Read};
@@ -44,8 +44,6 @@ pub fn read_trace_bin(path: &PathBuf) -> Vec<RegisterState> {
         ptrs.push(reg);
     }
 
-    //print_registers(&ptrs);
-
     ptrs
 }
 
@@ -78,8 +76,6 @@ pub fn read_memory_bin(mem_path: &PathBuf, program_path: &PathBuf) -> Memory {
     let p: CompiledProgram = serde_json::from_reader(reader).unwrap();
     mem.set_codelen(p.data.len());
 
-    //print_memory(&mem);
-
     mem
 }
 
@@ -97,22 +93,6 @@ pub fn read_builtins(program_path: &PathBuf, output_len: Option<u64>) -> Vec<Bui
         })
         .collect::<Vec<_>>();
     builtins
-}
-
-fn print_registers(reg: &[RegisterState]) {
-    for (n, r) in reg.iter().enumerate() {
-        println!("{} {} {} {}", n, r.pc, r.ap, r.fp,);
-    }
-}
-
-fn print_memory(mem: &Memory) {
-    for n in 0..mem.size() as usize {
-        println!(
-            "{} {}",
-            n,
-            mem.data[n].unwrap_or(Word::new(Felt::from(0u8))).word()
-        );
-    }
 }
 
 #[cfg(test)]

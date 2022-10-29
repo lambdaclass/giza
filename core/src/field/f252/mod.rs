@@ -310,6 +310,13 @@ impl From<u8> for BaseElement {
     }
 }
 
+impl From<usize> for BaseElement {
+    /// Converts a usize value into a field element.
+    fn from(value: usize) -> Self {
+        Self(Fr::from_raw([value as u64, 0, 0, 0]))
+    }
+}
+
 impl From<[u64; 4]> for BaseElement {
     /// Converts the value encoded in an array of 4 64-bit words into a field element. The bytes
     /// are assumed to be in little-endian byte order. If the value is greater than or equal
