@@ -244,9 +244,10 @@ impl PublicInputs {
         for builtin in self.builtins.iter() {
             if let Builtin::Output(_) = builtin {
                 result.write_u8(1);
-            } else {
-                result.write_u8(0);
             }
+        }
+        if self.builtins.len() == 0 {
+            result.write_u8(0);
         }
         result
     }
