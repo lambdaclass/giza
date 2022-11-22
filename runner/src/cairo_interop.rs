@@ -74,7 +74,7 @@ pub fn read_memory_bin(mem_path: &PathBuf, program_path: &PathBuf) -> Memory {
     let file = File::open(&program_path).expect("Compiled program file not found");
     let reader = BufReader::new(file);
     let p: CompiledProgram = serde_json::from_reader(reader).unwrap();
-    mem.set_codelen(p.data.len());
+    mem.set_codelen(p.data.len() + 1);
 
     mem
 }
