@@ -5,7 +5,7 @@ use giza_core::{
     A_RC_PRIME_LAST, MEM_A_TRACE_OFFSET, MEM_P_TRACE_OFFSET, P_M_LAST,
 };
 use starknet_crypto::pedersen_hash;
-use starknet_ff::FieldElement as StarknetFieldElement;
+use starknet_ff::FieldElement as Fe;
 use winter_air::{
     Air, AirContext, Assertion, AuxTraceRandElements, ProofOptions as WinterProofOptions,
     TraceInfo, TransitionConstraintDegree,
@@ -257,14 +257,28 @@ impl PublicInputs {
 impl Serializable for PublicInputs {
     fn write_into<W: ByteWriter>(&self, target: &mut W) {
         let mut data = Vec::new();
-        let pub_mem_hash = self
+
+        // Use a Pedersen hash chain to compute the public memory digest
+        let len = Fe::from(self.mem.1.len());
+        let mut digest = self
             .mem
             .1
             .iter()
-            .map(|x| StarknetFieldElement::from_mont(x.unwrap().word().to_raw().0))
-            .reduce(|hash, item| pedersen_hash(&hash, &item))
-            .unwrap()
-            .to_bytes_be();
+            .map(|x| {
+                Fe::from_bytes_be(&{
+                    let mut data = [0; 32];
+                    write_be_bytes(x.unwrap().word().to_raw().0, &mut data);
+                    data
+                })
+                .unwrap()
+            })
+            .fold(Fe::from(0u8), |hash, item| pedersen_hash(&hash, &item));
+        digest = pedersen_hash(&digest, &len);
+        let pub_mem_hash = {
+            let mut bytes = digest.to_bytes_be();
+            bytes.reverse();
+            Felt::from(bytes)
+        };
 
         data.push(self.init.pc);
         data.push(self.init.ap);
@@ -278,7 +292,7 @@ impl Serializable for PublicInputs {
         data.push(self.rc_max.into());
 
         data.push(self.mem.0.len().into());
-        data.push(pub_mem_hash.into());
+        data.push(pub_mem_hash);
 
         data.push(self.num_steps.into());
 
@@ -325,5 +339,11 @@ impl Deserializable for PublicInputs {
             num_steps as usize,
             builtins,
         ))
+    }
+}
+
+fn write_be_bytes(value: [u64; 4], out: &mut [u8; 32]) {
+    for (src, dst) in value.iter().rev().cloned().zip(out.chunks_exact_mut(8)) {
+        dst.copy_from_slice(&src.to_be_bytes());
     }
 }
