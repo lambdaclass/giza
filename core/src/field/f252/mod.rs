@@ -19,9 +19,6 @@ use winter_utils::{
 
 use ff::{Field, PrimeField};
 
-#[cfg(test)]
-mod tests;
-
 // FIELD ELEMENT
 // ================================================================================================
 
@@ -52,7 +49,7 @@ impl FieldElement for BaseElement {
 
     const ELEMENT_BYTES: usize = ELEMENT_BYTES;
 
-    const IS_CANONICAL: bool = true;
+    const IS_CANONICAL: bool = false;
 
     fn inv(self) -> Self {
         Self(self.0.invert().unwrap())
@@ -63,6 +60,7 @@ impl FieldElement for BaseElement {
     }
 
     fn elements_as_bytes(elements: &[Self]) -> &[u8] {
+        // NOTE: elements are still in Montgomery form
         let p = elements.as_ptr();
         let len = elements.len() * Self::ELEMENT_BYTES;
         unsafe { slice::from_raw_parts(p as *const u8, len) }
@@ -371,7 +369,7 @@ impl AsBytes for BaseElement {
 
 impl Serializable for BaseElement {
     fn write_into<W: ByteWriter>(&self, target: &mut W) {
-        target.write_u8_slice(&self.0.to_le_bytes());
+        target.write_u8_slice(&self.to_raw().to_le_bytes());
     }
 }
 
@@ -384,7 +382,7 @@ impl Deserializable for BaseElement {
             .collect::<Vec<u64>>()
             .try_into()
             .unwrap();
-        Ok(BaseElement(Fr(value)))
+        Ok(BaseElement(Fr::from_raw(value)))
     }
 }
 
@@ -591,9 +589,14 @@ fn write_le_bytes(value: [u64; 4], out: &mut [u8]) {
     }
 }
 
-#[test]
-fn as_int() {
-    let a = BaseElement::from_raw([3, 0, 0, 0]);
-    let b: u64 = a.as_int().try_into().unwrap();
-    assert_eq!(b, 3);
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn as_int() {
+        let a = BaseElement::from_raw([3, 0, 0, 0]);
+        let b: u64 = a.as_int().try_into().unwrap();
+        assert_eq!(b, 3);
+    }
 }
