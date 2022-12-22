@@ -222,7 +222,7 @@ impl<'a, E: FieldElement + From<Felt>> FlagDecomposition<E> for MainFrameSegment
 
 #[derive(Debug, Clone)]
 pub struct AuxEvaluationFrame<E: FieldElement> {
-    table: Table<E>, // row-major indexing
+    pub table: Table<E>, // row-major indexing
 }
 
 impl<E: FieldElement> EvaluationFrame<E> for AuxEvaluationFrame<E> {
