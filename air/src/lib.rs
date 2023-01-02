@@ -184,6 +184,7 @@ impl Air for ProcessorAir {
 // PUBLIC INPUTS
 // ================================================================================================
 
+#[derive(Clone)]
 pub struct PublicInputs {
     pub init: RegisterState,                // initial register state
     pub fin: RegisterState,                 // final register state
