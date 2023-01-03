@@ -557,7 +557,7 @@ impl BigInt {
 impl Display for BigInt {
     fn fmt(&self, f: &mut Formatter) -> core::fmt::Result {
         for i in (0..4).rev() {
-            LowerHex::fmt(&self.0[i], f)?;
+            write!(f, "{:016x}", &self.0[i]);
         }
         Ok(())
     }
