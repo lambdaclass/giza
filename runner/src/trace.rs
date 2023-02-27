@@ -14,6 +14,7 @@ use itertools::Itertools;
 use rayon::prelude::*;
 use std::path::PathBuf;
 
+#[derive(Clone)]
 pub struct ExecutionTrace {
     layout: TraceLayout,
     meta: Vec<u8>,
