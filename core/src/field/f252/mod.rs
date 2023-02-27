@@ -19,15 +19,22 @@ use winter_utils::{
 
 use ff::{Field, PrimeField};
 
+#[macro_use]
+use serde::{Serialize, Deserialize};
+use serde_hex::{SerHex, Strict};
+
 // FIELD ELEMENT
 // ================================================================================================
 
 // Note that the internal representation of Fr is assumed to be in Montgomery form with R=2^256
-#[derive(PrimeField)]
+#[derive(PrimeField, Serialize, Deserialize)]
 #[PrimeFieldModulus = "3618502788666131213697322783095070105623107215331596699973092056135872020481"]
 #[PrimeFieldGenerator = "3"]
 #[PrimeFieldReprEndianness = "little"]
-struct Fr([u64; 4]);
+struct Fr(
+    #[serde(with = "SerHex::<Strict>")]
+    [u64; 4]
+);
 
 // Number of bytes needed to represent field element
 const ELEMENT_BYTES: usize = core::mem::size_of::<Fr>();
@@ -37,7 +44,7 @@ const ELEMENT_BYTES: usize = core::mem::size_of::<Fr>();
 pub struct BigInt(pub [u64; 4]);
 
 // Represents a base field element, using Fr as the backing type.
-#[derive(Copy, Clone, Debug, PartialEq, Eq, Default)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Default, Serialize, Deserialize)]
 pub struct BaseElement(Fr);
 
 impl FieldElement for BaseElement {
