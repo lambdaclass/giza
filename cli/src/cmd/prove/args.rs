@@ -116,7 +116,7 @@ fn parse_fri_folding_factor(value: &str) -> Result<usize, Error> {
         .parse::<usize>()
         .map_err(|e| Error::raw(ErrorKind::InvalidValue, format!("{}", e)))?;
 
-    if value != 4 && value != 8 && value != 16 {
+    if value != 2 && value != 4 && value != 8 && value != 16 {
         Err(Error::raw(ErrorKind::ValueValidation, "must be 4, 8 or 16"))
     } else {
         Ok(value)
