@@ -17,7 +17,7 @@ use std::path::PathBuf;
 pub struct ExecutionTrace {
     layout: TraceLayout,
     meta: Vec<u8>,
-    trace: Matrix<Felt>,
+    pub trace: Matrix<Felt>,
     pub memory: Memory,
     pub rc_min: u16,
     pub rc_max: u16,

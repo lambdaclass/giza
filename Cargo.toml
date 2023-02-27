@@ -8,3 +8,10 @@ members = [
   "cli",
   "wasm"
 ]
+
+[patch."https://github.com/zerosync/winterfell"]
+prover = { package = "winter-prover", git = "https://github.com/entropidelic/winterfell", default-features = false }
+math = { package = "winter-math", git = "https://github.com/entropidelic/winterfell", default-features = false }
+winter-utils = { package = "winter-utils", git = "https://github.com/entropidelic/winterfell", default-features = false }
+winter-air = { package = "winter-air", git = "https://github.com/entropidelic/winterfell", default-features = false }
+winterfell = { package = "winter-verifier", git = "https://github.com/entropidelic/winterfell", default-features = false }
