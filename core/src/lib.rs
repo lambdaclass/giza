@@ -1,5 +1,5 @@
 #![feature(array_chunks)]
-
+#![allow(warnings)]
 pub use core::ops::Range;
 
 pub use math::{ExtensionOf, FieldElement, StarkField};

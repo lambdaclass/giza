@@ -1,7 +1,6 @@
 //! An implementation of the 252-bit STARK-friendly prime field chosen by Starkware
 //! with modulus $2^{251} + 17 \cdot 2^{192} + 1$.
 //! TODO: Worth switching to Barrett reduction for efficiency?
-
 use core::{
     convert::{TryFrom, TryInto},
     fmt::{Debug, Display, Formatter, LowerHex},
@@ -31,10 +30,7 @@ use serde_hex::{SerHex, Strict};
 #[PrimeFieldModulus = "3618502788666131213697322783095070105623107215331596699973092056135872020481"]
 #[PrimeFieldGenerator = "3"]
 #[PrimeFieldReprEndianness = "little"]
-struct Fr(
-    #[serde(with = "SerHex::<Strict>")]
-    [u64; 4]
-);
+struct Fr(#[serde(with = "SerHex::<Strict>")] [u64; 4]);
 
 // Number of bytes needed to represent field element
 const ELEMENT_BYTES: usize = core::mem::size_of::<Fr>();

@@ -1,5 +1,4 @@
-#![feature(generic_associated_types)]
-
+#![allow(warnings)]
 use giza_core::{
     Builtin, ExtensionOf, Felt, FieldElement, RegisterState, Word, A_RC_PRIME_FIRST,
     A_RC_PRIME_LAST, MEM_A_TRACE_OFFSET, MEM_P_TRACE_OFFSET, P_M_LAST,
