@@ -1,4 +1,4 @@
-#![allow(warnings)]
+#![allow(clippy)]
 #![feature(array_chunks)]
 pub use core::ops::Range;
 
