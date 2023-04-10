@@ -131,6 +131,7 @@ impl ExecutionTrace {
         //    TODO: We should also append dummy output (not just program) public memory, in case the
         //    trace length is not already long enough to contain these values.
         let mut col_extension = memory.get_holes(VirtualColumn::new(&state.mem_a).to_column());
+        println!("MEMORY HOLES: {:?}", col_extension);
         col_extension.extend(vec![Felt::ZERO; memory.get_codelen()]);
         for (n, col) in VirtualColumn::new(&[col_extension])
             .to_columns(&[MEM_A_TRACE_WIDTH])
@@ -242,6 +243,7 @@ impl ExecutionTrace {
 
         println!("INSTRUCTION STATES: {:?}", inst_states);
 
+        // Va llenando el state
         let mut state = State::new(registers.len() + 1);
         for (n, (reg_state, inst_state)) in registers.iter().zip(inst_states).enumerate() {
             state.set_register_state(n, *reg_state);
