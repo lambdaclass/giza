@@ -223,6 +223,9 @@ impl ExecutionTrace {
     ) -> ExecutionTrace {
         let mem = read_memory_bin(&memory_path, &program_path);
         let registers = read_trace_bin(&trace_path);
+
+        println!("REGISTERS: {:?}", registers);
+
         let builtins = read_builtins(&program_path, output_len);
         let num_steps = registers.len();
 

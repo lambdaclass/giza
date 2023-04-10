@@ -1,4 +1,3 @@
-#![allow(clippy::all)]
 #![feature(array_chunks)]
 pub use core::ops::Range;
 
