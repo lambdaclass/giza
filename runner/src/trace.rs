@@ -229,6 +229,8 @@ impl ExecutionTrace {
         let builtins = read_builtins(&program_path, output_len);
         let num_steps = registers.len();
 
+        println!("MEMORY: {:?}", mem);
+
         let inst_states = registers
             .par_iter()
             .progress()
@@ -237,6 +239,8 @@ impl ExecutionTrace {
                 step.execute(false)
             })
             .collect::<Vec<_>>();
+
+        println!("INSTRUCTION STATES: {:?}", inst_states);
 
         let mut state = State::new(registers.len() + 1);
         for (n, (reg_state, inst_state)) in registers.iter().zip(inst_states).enumerate() {
