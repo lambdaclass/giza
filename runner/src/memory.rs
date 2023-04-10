@@ -8,7 +8,7 @@ use core::iter::repeat;
 use giza_core::{Felt, FieldHelpers, StarkField, Word};
 
 /// This data structure stores the memory of the program
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct Memory {
     /// length of the public memory
     codelen: usize,

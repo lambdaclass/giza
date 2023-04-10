@@ -128,6 +128,7 @@ pub struct RegisterState {
     pub fp: Felt,
 }
 
+#[derive(Debug)]
 pub struct InstructionState {
     /// Instruction
     pub inst: Word,
