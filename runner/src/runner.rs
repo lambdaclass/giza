@@ -42,6 +42,7 @@ impl<'a> Step<'a> {
         let (next_ap, next_fp, op0_update, op1_update, res_update, dst_update) =
             self.next_apfp(size, res, dst, dst_addr, op1_addr, write);
 
+        println!("OP0: {:?}", op0);
         if op0_update.is_some() {
             op0 = op0_update;
         }
@@ -279,7 +280,6 @@ impl<'a> Step<'a> {
             println!("DST: {:?}", dst);
             dst_update = self.mem.read(self.curr.ap);
             println!("DST_UPDATE: {:?}", dst_update);
-            println!("OP0: {:?}", op0);
             op0_update = self.mem.read(self.curr.ap + Felt::ONE);
             println!("OP0_UPDATE: {:?}", op0_update);
 
