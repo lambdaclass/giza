@@ -39,6 +39,7 @@ impl<'a> Step<'a> {
         let (dst_addr, mut dst) = self.set_dst();
         let mut res = self.set_res(op0, op1, dst);
         let next_pc = self.next_pc(size, res, dst, op1);
+
         let (next_ap, next_fp, op0_update, op1_update, res_update, dst_update) =
             self.next_apfp(size, res, dst, dst_addr, op1_addr, write);
 
@@ -277,11 +278,13 @@ impl<'a> Step<'a> {
                 assert_eq!(expected_b, self.curr.pc + size);
             }
 
-            println!("DST: {:?}", dst);
+            // mem.read(ap) == fp
+            // mem.read(ap + 1) == pc + size
+
             dst_update = self.mem.read(self.curr.ap);
-            println!("DST_UPDATE: {:?}", dst_update);
+            // dst = fp
             op0_update = self.mem.read(self.curr.ap + Felt::ONE);
-            println!("OP0_UPDATE: {:?}", op0_update);
+            // op0 = pc + size
 
             // Update fp
             // pointer for next frame is after current fp and instruction after call

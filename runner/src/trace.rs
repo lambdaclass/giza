@@ -131,8 +131,9 @@ impl ExecutionTrace {
         //    TODO: We should also append dummy output (not just program) public memory, in case the
         //    trace length is not already long enough to contain these values.
         let mut col_extension = memory.get_holes(VirtualColumn::new(&state.mem_a).to_column());
-        println!("MEMORY HOLES: {:?}", col_extension);
+        // println!("MEMORY HOLES: {:?}", col_extension);
         col_extension.extend(vec![Felt::ZERO; memory.get_codelen()]);
+        println!("COL EXTENSION: {:?}", col_extension);
         for (n, col) in VirtualColumn::new(&[col_extension])
             .to_columns(&[MEM_A_TRACE_WIDTH])
             .iter()
