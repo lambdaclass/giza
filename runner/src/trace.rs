@@ -148,12 +148,14 @@ impl ExecutionTrace {
         // 2. Fill gaps between sorted offsets so that we can compute the proper permutation
         //    product column in the range check auxiliary segment (if we implemented Ord for Felt
         //    we could achieve a speedup here)
+        println!("OFFSETS BEFORE: {:?}", state.offsets);
         let b15 = Felt::from(2u8).exp(15u32.into());
         let mut rc_column: Vec<Felt> = VirtualColumn::new(&state.offsets)
             .to_column()
             .into_iter()
             .map(|x| x + b15)
             .collect();
+        println!("OFFSETS AFTER: {:?}", rc_column);
         let mut rc_sorted: Vec<u16> = rc_column
             .iter()
             .map(|x| x.as_int().try_into().unwrap())
