@@ -170,6 +170,7 @@ impl ExecutionTrace {
             }
         }
         let offsets = VirtualColumn::new(&[rc_column]).to_columns(&[3]);
+        println!("OFFSETS: {:?}", offsets);
 
         // This is hacky... We're adding a selector to the main trace to disable the Cairo
         // transition constraints for public memory (and any extended trace cells that were added
