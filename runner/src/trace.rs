@@ -121,6 +121,8 @@ impl ExecutionTrace {
             mul.push(state.mem_v[2][step] * state.mem_v[3][step]); // op0 * op1
         }
 
+        println!("MUL: {:?}", mul);
+
         // 1. Append dummy artificial accesses to mem_a and mem_v to fill memory holes.
         //    These gaps are due to interaction with builtins, and they still need to be handled
         //    elsewhere in the code for soundness.
@@ -133,13 +135,13 @@ impl ExecutionTrace {
         let mut col_extension = memory.get_holes(VirtualColumn::new(&state.mem_a).to_column());
         // println!("MEMORY HOLES: {:?}", col_extension);
         col_extension.extend(vec![Felt::ZERO; memory.get_codelen()]);
-        println!("COL EXTENSION: {:?}", col_extension);
         for (n, col) in VirtualColumn::new(&[col_extension])
             .to_columns(&[MEM_A_TRACE_WIDTH])
             .iter()
             .enumerate()
         {
             state.mem_a[n].extend(col);
+
             state.mem_v[n].extend(Felt::zeroed_vector(col.len()));
         }
 
