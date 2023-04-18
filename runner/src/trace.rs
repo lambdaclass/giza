@@ -121,8 +121,6 @@ impl ExecutionTrace {
             mul.push(state.mem_v[2][step] * state.mem_v[3][step]); // op0 * op1
         }
 
-        println!("MUL: {:?}", mul);
-
         // 1. Append dummy artificial accesses to mem_a and mem_v to fill memory holes.
         //    These gaps are due to interaction with builtins, and they still need to be handled
         //    elsewhere in the code for soundness.
@@ -440,7 +438,9 @@ fn resize_to_pow2<E: FieldElement>(columns: &mut [Vec<E>]) {
         .max()
         .unwrap();
     for column in columns.iter_mut() {
+        println!("TRACE COLUMNS BEFORE RESIZE POWER OF TWO: {:?}", column);
         let last_value = column.last().copied().unwrap();
         column.resize(trace_len_pow2, last_value);
+        println!("TRACE COLUMNS AFTER RESIZE POWER OF TWO: {:?}", column);
     }
 }
