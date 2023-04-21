@@ -119,6 +119,7 @@ impl ExecutionTrace {
             t0.push(f_pc_jnz * dst); // f_pc_jnz * dst
             t1.push(t0[step] * res); // t_0 * res
             mul.push(state.mem_v[2][step] * state.mem_v[3][step]); // op0 * op1
+            println!("MUL: {:?}", state.mem_v[2][step] * state.mem_v[3][step]);
         }
 
         // 1. Append dummy artificial accesses to mem_a and mem_v to fill memory holes.
@@ -167,6 +168,7 @@ impl ExecutionTrace {
             match s[1] - s[0] {
                 0 | 1 => {}
                 _ => {
+                    println!("LALA");
                     rc_column.extend((s[0] + 1..s[1]).map(|x| Felt::from(x)).collect::<Vec<_>>());
                 }
             }
