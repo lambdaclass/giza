@@ -27,6 +27,7 @@ pub struct ExecutionTrace {
 }
 
 /// A virtual column is composed of one or more subcolumns.
+#[derive(Debug)]
 struct VirtualColumn<'a, E: FieldElement> {
     subcols: &'a [Vec<E>],
 }
@@ -361,6 +362,7 @@ where
     let mut v_prime = vec![E::ZERO; a.len()];
     let mut a_replaced = a.clone();
     let mut v_replaced = v.clone();
+
     let (pub_a, pub_v) = trace.get_public_mem();
     let l = a.len() - pub_a.len() - 1;
     for (i, (n, x)) in pub_a.iter().copied().zip(pub_v).enumerate() {
@@ -385,6 +387,10 @@ where
         p[i] = (z - (a_i + alpha * v_i).into()) * p[i - 1]
             / (z - (a_prime[i] + alpha * v_prime[i]).into());
     }
+
+    dbg!(a_prime);
+    dbg!(v_prime);
+    dbg!(p);
 
     // Split virtual columns into separate auxiliary columns
     let mut aux_columns = VirtualColumn::new(&[a_prime, v_prime, p]).to_columns(&[
@@ -447,5 +453,34 @@ fn resize_to_pow2<E: FieldElement>(columns: &mut [Vec<E>]) {
         let last_value = column.last().copied().unwrap();
         column.resize(trace_len_pow2, last_value);
         println!("TRACE COLUMNS AFTER RESIZE POWER OF TWO: {:?}", column);
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use winterfell::math::fields::f128::BaseElement;
+
+    use super::*;
+
+    #[test]
+    fn virtual_col_to_colums() {
+        let mut inner = vec![BaseElement::ZERO; 2];
+        inner.extend_from_slice(&[BaseElement::ONE; 3]);
+
+        let col = vec![inner];
+
+        let virtual_col = VirtualColumn::new(&col);
+
+        println!("Virtual Col: {:?}", virtual_col);
+        println!("Col: {:?}", virtual_col.to_columns(&[4]));
+    }
+
+    #[test]
+    fn sort_test() {
+        let a = vec![0, 3, 1, 5, 2, 4];
+        let mut indices = (0..a.len()).collect::<Vec<_>>();
+        indices.sort_by_key(|&i| a[i]);
+
+        println!("{:?}", indices);
     }
 }

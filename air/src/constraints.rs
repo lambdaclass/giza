@@ -122,11 +122,11 @@ impl<E: FieldElement + From<Felt>> EvaluationResult<E> for [E] {
         self[NEXT_PC_1] =
             (curr.t1() - curr.f_pc_jnz()) * (next.pc() - (curr.pc() + curr.inst_size()));
         self[NEXT_PC_2] = curr.t0() * (next.pc() - (curr.pc() + curr.op1()))
-           + (one - curr.f_pc_jnz()) * next.pc()
-           - ((one - curr.f_pc_abs() - curr.f_pc_rel() - curr.f_pc_jnz())
-                   * (curr.pc() + curr.inst_size())
-               + curr.f_pc_abs() * curr.res()
-               + curr.f_pc_rel() * (curr.pc() + curr.res()));
+            + (one - curr.f_pc_jnz()) * next.pc()
+            - ((one - curr.f_pc_abs() - curr.f_pc_rel() - curr.f_pc_jnz())
+                * (curr.pc() + curr.inst_size())
+                + curr.f_pc_abs() * curr.res()
+                + curr.f_pc_rel() * (curr.pc() + curr.res()));
         self[T0] = curr.f_pc_jnz() * curr.dst() - curr.t0();
         self[T1] = curr.t0() * curr.res() - curr.t1();
     }
