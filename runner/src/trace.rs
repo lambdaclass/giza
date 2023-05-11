@@ -388,9 +388,9 @@ where
             / (z - (a_prime[i] + alpha * v_prime[i]).into());
     }
 
-    dbg!(a_prime);
-    dbg!(v_prime);
-    dbg!(p);
+    println!("A PRIME: {:?}", a_prime);
+    println!("V PRIME: {:?}", v_prime);
+    println!("P: {:?}", p);
 
     // Split virtual columns into separate auxiliary columns
     let mut aux_columns = VirtualColumn::new(&[a_prime, v_prime, p]).to_columns(&[
