@@ -120,7 +120,7 @@ impl ExecutionTrace {
             t0.push(f_pc_jnz * dst); // f_pc_jnz * dst
             t1.push(t0[step] * res); // t_0 * res
             mul.push(state.mem_v[2][step] * state.mem_v[3][step]); // op0 * op1
-            println!("MUL: {:?}", state.mem_v[2][step] * state.mem_v[3][step]);
+                                                                   // println!("MUL: {:?}", state.mem_v[2][step] * state.mem_v[3][step]);
         }
 
         // 1. Append dummy artificial accesses to mem_a and mem_v to fill memory holes.
@@ -150,14 +150,14 @@ impl ExecutionTrace {
         // 2. Fill gaps between sorted offsets so that we can compute the proper permutation
         //    product column in the range check auxiliary segment (if we implemented Ord for Felt
         //    we could achieve a speedup here)
-        println!("OFFSETS BEFORE: {:?}", state.offsets);
+        // println!("OFFSETS BEFORE: {:?}", state.offsets);
         let b15 = Felt::from(2u8).exp(15u32.into());
         let mut rc_column: Vec<Felt> = VirtualColumn::new(&state.offsets)
             .to_column()
             .into_iter()
             .map(|x| x + b15)
             .collect();
-        println!("OFFSETS AFTER: {:?}", rc_column);
+        // println!("OFFSETS AFTER: {:?}", rc_column);
         let mut rc_sorted: Vec<u16> = rc_column
             .iter()
             .map(|x| x.as_int().try_into().unwrap())
@@ -169,13 +169,13 @@ impl ExecutionTrace {
             match s[1] - s[0] {
                 0 | 1 => {}
                 _ => {
-                    println!("LALA");
+                    // println!("LALA");
                     rc_column.extend((s[0] + 1..s[1]).map(|x| Felt::from(x)).collect::<Vec<_>>());
                 }
             }
         }
         let offsets = VirtualColumn::new(&[rc_column]).to_columns(&[3]);
-        println!("OFFSETS: {:?}", offsets);
+        // println!("OFFSETS: {:?}", offsets);
 
         // This is hacky... We're adding a selector to the main trace to disable the Cairo
         // transition constraints for public memory (and any extended trace cells that were added
@@ -232,12 +232,12 @@ impl ExecutionTrace {
         let mem = read_memory_bin(&memory_path, &program_path);
         let registers = read_trace_bin(&trace_path);
 
-        println!("REGISTERS: {:?}", registers);
+        // println!("REGISTERS: {:?}", registers);
 
         let builtins = read_builtins(&program_path, output_len);
         let num_steps = registers.len();
 
-        println!("MEMORY: {:?}", mem);
+        // println!("MEMORY: {:?}", mem);
 
         let inst_states = registers
             .par_iter()
@@ -248,7 +248,7 @@ impl ExecutionTrace {
             })
             .collect::<Vec<_>>();
 
-        println!("INSTRUCTION STATES: {:?}", inst_states);
+        // println!("INSTRUCTION STATES: {:?}", inst_states);
 
         // Va llenando el state
         let mut state = State::new(registers.len() + 1);
@@ -388,6 +388,12 @@ where
             / (z - (a_prime[i] + alpha * v_prime[i]).into());
     }
 
+    println!("# RANDOM ELEMENTS - AUXILIARY SEGMENTS");
+    println!("Z: {:?}", z);
+    println!("ALPHA: {:?}", alpha);
+
+    println!("#######################################");
+
     println!("A PRIME: {:?}", a_prime);
     println!("V PRIME: {:?}", v_prime);
     println!("P: {:?}", p);
@@ -449,10 +455,10 @@ fn resize_to_pow2<E: FieldElement>(columns: &mut [Vec<E>]) {
         .max()
         .unwrap();
     for column in columns.iter_mut() {
-        println!("TRACE COLUMNS BEFORE RESIZE POWER OF TWO: {:?}", column);
+        // println!("TRACE COLUMNS BEFORE RESIZE POWER OF TWO: {:?}", column);
         let last_value = column.last().copied().unwrap();
         column.resize(trace_len_pow2, last_value);
-        println!("TRACE COLUMNS AFTER RESIZE POWER OF TWO: {:?}", column);
+        // println!("TRACE COLUMNS AFTER RESIZE POWER OF TWO: {:?}", column);
     }
 }
 
