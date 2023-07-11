@@ -30,7 +30,6 @@ impl Cmd for ProveArgs {
         let (proof, pub_inputs) = prover::prove_trace(trace, &proof_options).unwrap();
         let input_bytes = pub_inputs.to_bytes();
         let proof_bytes = proof.to_bytes();
-        println!("Proof size: {:.1} KB", proof_bytes.len() as f64 / 1024f64);
 
         // Write proof to disk
         let data = ProofData {

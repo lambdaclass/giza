@@ -50,8 +50,6 @@ fn main() {
     // generate the proof of execution
     let proof_options = ProofOptions::with_proof_options(None, None, None, None, None);
     let (proof, pub_inputs) = prover::prove_trace(trace, &proof_options).unwrap();
-    let proof_bytes = proof.to_bytes();
-    println!("Proof size: {:.1} KB", proof_bytes.len() as f64 / 1024f64);
 
     // verify correct program execution
     match winterfell::verify::<ProcessorAir>(proof, pub_inputs) {

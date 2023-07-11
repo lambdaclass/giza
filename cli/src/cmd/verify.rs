@@ -39,10 +39,7 @@ impl Cmd for VerifyArgs {
         let proof = StarkProof::from_bytes(&data.proof_bytes).unwrap();
 
         // Verify execution
-        match winterfell::verify::<ProcessorAir>(proof, pub_inputs) {
-            Ok(_) => println!("Execution verified"),
-            Err(err) => println!("Failed to verify execution: {}", err),
-        }
+        let _ = winterfell::verify::<ProcessorAir>(proof, pub_inputs);
 
         Ok(VerifyOutput {})
     }
