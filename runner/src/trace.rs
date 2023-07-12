@@ -8,8 +8,6 @@ use giza_core::{
 };
 use winterfell::{Matrix, Trace, TraceLayout};
 
-use indicatif::ParallelProgressIterator;
-use indicatif::ProgressIterator;
 use itertools::Itertools;
 use rayon::prelude::*;
 use std::path::PathBuf;
@@ -158,7 +156,7 @@ impl ExecutionTrace {
         rc_sorted.sort_unstable();
         let rc_min = rc_sorted.first().unwrap().clone();
         let rc_max = rc_sorted.last().unwrap().clone();
-        for s in rc_sorted.windows(2).progress() {
+        for s in rc_sorted.windows(2) {
             match s[1] - s[0] {
                 0 | 1 => {}
                 _ => {
@@ -227,7 +225,6 @@ impl ExecutionTrace {
 
         let inst_states = registers
             .par_iter()
-            .progress()
             .map(|ptrs| {
                 let mut step = Step::new(&mem, *ptrs);
                 step.execute(false)
@@ -363,7 +360,7 @@ where
     let a_0: E = a[0].into();
     let v_0: E = v[0].into();
     p[0] = (z - (a_0 + alpha * v_0).into()) / (z - (a_prime[0] + alpha * v_prime[0]).into());
-    for i in (1..p.len()).progress() {
+    for i in (1..p.len()) {
         let a_i: E = a[i].into();
         let v_i: E = v[i].into();
         p[i] = (z - (a_i + alpha * v_i).into()) * p[i - 1]
@@ -406,7 +403,7 @@ where
     let mut p = vec![E::ZERO; trace.length() * OFF_X_TRACE_WIDTH];
     let a_0: E = a[0].into();
     p[0] = (z - a_0) / (z - a_prime[0]);
-    for i in (1..p.len()).progress() {
+    for i in (1..p.len()) {
         let a_i: E = a[i].into();
         p[i] = (z - a_i) * p[i - 1] / (z - a_prime[i]);
     }

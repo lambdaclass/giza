@@ -17,7 +17,6 @@ serde_json = "1.0.79"
 itertools = "0.10.3"
 hex = "0.4"
 pyo3 = { package = "pyo3", version = "0.16.3", features = ["auto-initialize"], optional = true }
-indicatif = {version = "*", features = ["rayon"]}
 rayon = "1.5.3"
 
 [features]
